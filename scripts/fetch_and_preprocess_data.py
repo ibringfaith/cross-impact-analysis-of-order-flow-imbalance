@@ -27,37 +27,59 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
     data = client.mbp10(symbols=[stock], start=start_date, end=end_date)
     return data
 
+def derive_multi_level_ofi(data, num_levels=5):
+    """
+    Derives multi-level Order Flow Imbalance (OFI) for the given data
+    
+    Parameters:
+    - data: The MBP-10 data as a DataFrame
+    - num_levels: The number of levels to derive OFI for
+    
+    Returns:
+    - DataFrame with OFI metrics for each level
+    """
+    ofi_metrics = []
+    
+    for level in range(1, num_levels + 1):
+        bid_col = f'bid_size_{level}'
+        ask_col = f'ask_size_{level}'
+        data[f'OFI_level_{level}'] = data[ask_col] - data[bid_col]
+        ofi_metrics.append(f'OFI_level_{level}')
+    
+    return data[ofi_metrics]
+
+def apply_pca(ofi_data, n_components=1):
+    """
+    Apply PCA to reduce the dimensionality of multi-level OFI metrics
+    
+    Parameters:
+    - ofi_data: The OFI metrics to apply PCA on
+    - n_components: The number of principal components to keep
+    
+    Returns:
+    - DataFrame with the PCA components
+    """
+    pca = PCA(n_components=n_components)
+    pca_components = pca.fit_transform(ofi_data)
+    pca_df = pd.DataFrame(pca_components, columns=[f'PC{i+1}' for i in range(n_components)])
+    
+    return pca_df
+
 def preprocess_data(data):
     """
-    Preprocesses the raw MBP-10 data by performing transformations.
+    Preprocesses the raw MBP-10 data by performing transformations
     
     Parameters:
     - data: The raw MBP-10 data to be preprocessed
     
     Returns:
-    - Processed DataFrame
+    - Processed DataFrame with multi-level OFI and PCA components
     """
     data['timestamp'] = pd.to_datetime(data['timestamp'])
-    data['OFI'] = data['ask_size'] - data['bid_size']
-    data.fillna(0, inplace=True)
-    return data
-
-def apply_pca(data, n_components=3):
-    """
-    Integrate multi-level OFIs from data into a single metric using Principal Component Analysis (PCA)
-    
-    Parameters:
-    - data: The data to apply PCA on
-    - n_components: Number of components to keep after dimensionality reduction
-    
-    Returns:
-    - DataFrame with PCA components as new features
-    """
-    pca = PCA(n_components=n_components)
-    pca_components = pca.fit_transform(data[['OFI']].values)
-    pca_df = pd.DataFrame(pca_components, columns=[f'PC{i+1}' for i in range(n_components)])
+    ofi_data = compute_multi_level_ofi(data)
+    pca_df = apply_pca(ofi_data)
     data = pd.concat([data, pca_df], axis=1)
-    
+    data.fillna(0, inplace=True)
     return data
 
 def save_processed_data(data, filename):
@@ -81,7 +103,7 @@ def fetch_process_and_save_data(client, stocks, start_date, end_date):
     - start_date: The start date for fetching data in YYYY-MM-DD format
     - end_date: The end date for fetching data in YYYY-MM-DD format
     """
-    os.makedirs('data', exist_ok=True)  # Ensure the directory exists
+    os.makedirs('data', exist_ok=True)
     
     for stock in stocks:
         print(f"Fetching data for {stock}...")
@@ -97,9 +119,9 @@ if __name__ == "__main__":
     client = initialize_databento_client(api_key)
 
     # 10 Nasdaq 100 stocks representing various sectors
-    tickers = ['AAPL', 'MSFT', 'NVDA', 'AMGN', 'GILD', 'TSLA', 'PEP', 'JPM', 'V', 'XOM']
+    stocks = ['AAPL', 'MSFT', 'NVDA', 'AMGN', 'GILD', 'TSLA', 'PEP', 'JPM', 'V', 'XOM']
 
     start_date = '2022-01-01'
     end_date = '2024-12-31'
 
-    fetch_process_and_save_data(client, tickers, start_date, end_date)
+    fetch_process_and_save_data(client, stocks, start_date, end_date)
