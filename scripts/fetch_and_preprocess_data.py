@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     # use the Nasdaq ITCH data
     dataset="XNAS.ITCH"
-    start_date = '2022-01-01'
-    end_date = '2024-12-31'
+    start_date = '2024-11-01'
+    end_date = '2024-12-01'
 
     fetch_process_and_save_data(client, stocks, start_date, end_date, dataset)
