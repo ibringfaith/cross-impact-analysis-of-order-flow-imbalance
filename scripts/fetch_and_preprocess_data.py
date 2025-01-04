@@ -11,7 +11,7 @@ def initialize_databento_client(api_key):
     """
     return db.Historical(api_key)
 
-def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
+def fetch_mbp10_data(client, stock, start_date=None, end_date=None, dataset='XNAS.ITCH'):
     """
     Fetches MBP-10 data for the given stock using the MBP-10 data schema provided by Databento
     
@@ -20,13 +20,14 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
     - stock: The stock symbol
     - start_date: The start date for fetching data in YYYY-MM-DD format
     - end_date: The end date for fetching data in YYYY-MM-DD format
+    - dataset: Dataset to fetch
     
     Returns:
     - DataFrame containing the MBP-10 data for the specified stock
     """
     try:
         data = client.timeseries.get_range(
-            dataset="GLBX.MBP-10",
+            dataset=dataset,
             symbols=[stock],
             schema="mbp-10",
             start=start_date,
@@ -132,7 +133,9 @@ if __name__ == "__main__":
     # 10 Nasdaq 100 stocks representing various sectors
     stocks = ['AAPL', 'MSFT', 'NVDA', 'AMGN', 'GILD', 'TSLA', 'PEP', 'JPM', 'V', 'XOM']
 
+    # use the Nasdaq ITCH data
+    dataset="XNAS.ITCH"
     start_date = '2022-01-01'
     end_date = '2024-12-31'
 
-    fetch_process_and_save_data(client, stocks, start_date, end_date)
+    fetch_process_and_save_data(client, stocks, start_date, end_date, dataset)
