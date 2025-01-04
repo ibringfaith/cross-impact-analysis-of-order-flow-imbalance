@@ -25,19 +25,11 @@ git clone ibringfaith/cross-impact-analysis-of-order-flow-imbalance
 ```bash
 pip install -r requirements.txt
 ```
-3. Run the script to preprocess the data
+3. Run the script to preprocess the data (includes calculating OFI and applying PCA)
 ```bash
-python scripts/preprocess.py
+python scripts/fetch_and_preprocess_data.py
 ```
-4. Run the script to calculate OFI
-```bash
-python scripts/calculate_ofi.py
-```
-5. Run the script to apply PCA
-```bash
-python scripts/pca_analysis.py
-```
-6. Run the script to perform regression analysis
+4. Run the script to perform regression analysis
 ```bash
 python scripts/regression.py
 ```
