@@ -5,13 +5,13 @@ import os
 from dotenv import load_dotenv
 from sklearn.decomposition import PCA
 
-def initialize_databento_client(api_key):
+def initialize_databento_client(api_key: str) -> db.Historical:
     """
     Initializes and returns a Databento client using the provided API key
     """
     return db.Historical(api_key)
 
-def fetch_mbp10_data(client, stock, start_date=None, end_date=None, dataset='XNAS.ITCH'):
+def fetch_mbp10_data(client: db.Historical, stock: str, start_date: str = None, end_date: str = None, dataset: str = 'XNAS.ITCH') -> pd.DataFrame:
     """
     Fetches MBP-10 data for the given stock using the MBP-10 data schema provided by Databento
     
@@ -39,12 +39,12 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None, dataset='XNA
         print(f"Error fetching data: {e}")
         return pd.DataFrame()
 
-def derive_multi_level_ofi(data, num_levels=5):
+def derive_multi_level_ofi(data: pd.DataFrame, num_levels: int = 5) -> pd.Series:
     """
     Derives multi-level Order Flow Imbalance (OFI) for the given data
     
     Parameters:
-    - data: The MBP-10 data as a DataFrame
+    - data: The MBP-10 data
     - num_levels: The number of levels to derive OFI for
     
     Returns:
@@ -60,12 +60,12 @@ def derive_multi_level_ofi(data, num_levels=5):
     
     return data[ofi_metrics]
 
-def apply_pca(ofi_data, n_components=1):
+def apply_pca(ofi_data: pd.Series, n_components: int = 1) -> pd.DataFrame:
     """
     Apply PCA to reduce the dimensionality of multi-level OFI metrics
     
     Parameters:
-    - ofi_data: The OFI metrics to apply PCA on
+    - ofi_data: The OFI metrics
     - n_components: The number of principal components to keep
     
     Returns:
@@ -77,7 +77,7 @@ def apply_pca(ofi_data, n_components=1):
     
     return pca_df
 
-def preprocess_data(data):
+def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     Preprocesses the raw MBP-10 data by performing transformations
     
@@ -94,7 +94,7 @@ def preprocess_data(data):
     data.fillna(0, inplace=True)
     return data
 
-def save_processed_data(data, filename):
+def save_processed_data(data: pd.DataFrame, filename: str):
     """
     Saves the processed data to a CSV file.
     
@@ -105,7 +105,7 @@ def save_processed_data(data, filename):
     data.to_csv(filename, index=False)
     print(f"Processed data saved to {filename}")
 
-def fetch_process_and_save_data(client, stocks, start_date, end_date):
+def fetch_process_and_save_data(client: db.Historical, stocks: list[str], start_date: str, end_date: str, dataset: str = 'XNAS.ITCH'):
     """
     Fetches, preprocesses, and saves data for multiple stocks
     
