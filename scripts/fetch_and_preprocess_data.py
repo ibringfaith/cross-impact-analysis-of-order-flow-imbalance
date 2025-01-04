@@ -87,8 +87,8 @@ def save_processed_data(data, filename):
     Saves the processed data to a CSV file.
     
     Parameters:
-    - data: The processed data (as a DataFrame).
-    - filename: The file path to save the data (including file extension).
+    - data: The processed data
+    - filename: The file path to save the data
     """
     data.to_csv(filename, index=False)
     print(f"Processed data saved to {filename}")
