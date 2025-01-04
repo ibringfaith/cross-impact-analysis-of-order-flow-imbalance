@@ -24,14 +24,19 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
     Returns:
     - DataFrame containing the MBP-10 data for the specified stock
     """
-    data = client.timeseries.get_range(
-        dataset="GLBX.MBP-10",
-        symbols=[stock],
-        schema="mbp-10",
-        start=start_date,
-        end=end_date
-    )
-    return data
+    try:
+        data = client.timeseries.get_range(
+            dataset="GLBX.MBP-10",
+            symbols=[stock],
+            schema="mbp-10",
+            start=start_date,
+            end=end_date
+            )
+        df = data.to_df()
+        return df
+    except databento.common.error.BentoClientError as e:
+        print(f"Error fetching data: {e}")
+        return pd.DataFrame()
 
 def derive_multi_level_ofi(data, num_levels=5):
     """
