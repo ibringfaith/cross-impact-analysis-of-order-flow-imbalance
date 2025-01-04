@@ -9,7 +9,7 @@ def initialize_databento_client(api_key):
     """
     Initializes and returns a Databento client using the provided API key
     """
-    return db.Client(api_key=api_key)
+    return db.Historical(api_key)
 
 def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
     """
@@ -24,7 +24,13 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
     Returns:
     - DataFrame containing the MBP-10 data for the specified stock
     """
-    data = client.mbp10(symbols=[stock], start=start_date, end=end_date)
+    data = client.timeseries.get_range(
+        dataset="GLBX.MBP-10",
+        symbols=[stock],
+        schema="mbp-10",
+        start=start_date,
+        end=end_date
+    )
     return data
 
 def derive_multi_level_ofi(data, num_levels=5):
