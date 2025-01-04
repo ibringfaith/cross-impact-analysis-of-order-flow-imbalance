@@ -34,7 +34,7 @@ def fetch_mbp10_data(client, stock, start_date=None, end_date=None):
             )
         df = data.to_df()
         return df
-    except databento.common.error.BentoClientError as e:
+    except db.common.error.BentoClientError as e:
         print(f"Error fetching data: {e}")
         return pd.DataFrame()
 
