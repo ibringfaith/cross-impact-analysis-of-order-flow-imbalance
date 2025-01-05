@@ -20,16 +20,16 @@ def fetch_mbp10_data(client: db.Historical, stock: str, start_date: str = None, 
         The Databento client instance.
     stock: str
         The stock symbol.
-    start_date: str
+    start_date: str, optional
         The start date for fetching data in YYYY-MM-DD format.
-    end_date: str
+    end_date: str, optional
         The end date for fetching data in YYYY-MM-DD format.
     dataset: str
         Dataset to fetch.
     
     Returns
     ----------
-    DataFrame
+    pd.DataFrame
         The MBP-10 data for the specified stock.
     """
     try:
@@ -53,7 +53,7 @@ def save_data(data: pd.DataFrame, filename: str):
     
     Parameters
     ----------
-    data: DataFrame
+    data: pd.DataFrame
         The stock data.
     - filename: str
         The file path to save the data.

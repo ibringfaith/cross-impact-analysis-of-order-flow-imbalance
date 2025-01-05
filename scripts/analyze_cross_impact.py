@@ -9,9 +9,9 @@ def cross_impact_analysis(ofi_df: pd.DataFrame, price_changes_df: pd.DataFrame) 
     
     Parameters
     ----------
-        ofi_df: DataFrame
+        ofi_df: pd.DataFrame
             OFI metrics for multiple stocks.
-        price_changes_df: DataFrame
+        price_changes_df: pd.DataFrame
             Price changes for multiple stocks.
         
     Returns
