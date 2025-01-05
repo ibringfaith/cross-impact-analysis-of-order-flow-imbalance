@@ -162,6 +162,15 @@ def integrate_ofi_with_pca(multi_level_ofi: np.ndarray) -> np.ndarray:
 
 if __name__ == "__main__":
     stock_data = pd.read_csv("data/AAPL.csv")
-    ofi = compute_ofi(stock_data)
-    pca_ofi = integrate_ofi_with_pca(ofi)
-    print(pca_ofi.head())
+
+    # derive multi-level OFI metrics (up to 5 levels)
+    levels = 5
+
+    best_ofi, multi_level_ofi = calculate_ofi(stock_data, levels)
+    integrated_ofi = integrate_ofi_with_pca(multi_level_ofi)
+
+    print("Best-Level OFI (Cumulative):")
+    print(best_ofi.head())
+
+    print("\nIntegrated Multi-Level OFI (using PCA):")
+    print(integrated_ofi[:10])
