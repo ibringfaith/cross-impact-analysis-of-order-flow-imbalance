@@ -130,8 +130,8 @@ if __name__ == "__main__":
     api_key = os.getenv('API_KEY')
     client = initialize_databento_client(api_key)
 
-    # 10 Nasdaq 100 stocks representing various sectors
-    stocks = ['AAPL', 'MSFT', 'NVDA', 'AMGN', 'GILD', 'TSLA', 'PEP', 'JPM', 'V', 'XOM']
+    # 5 Nasdaq 100 stocks representing various sectors
+    stocks = ["AAPL", "AMGN", "TSLA", "JPM", "XOM"]
 
     # use the Nasdaq ITCH data
     dataset="XNAS.ITCH"
