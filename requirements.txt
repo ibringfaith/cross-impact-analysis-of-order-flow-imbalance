@@ -1,6 +1,7 @@
 databento==0.47.0
 numpy==2.2.0
 pandas==2.2.3
+jupyter==1.1.1
 pca==2.0.8
 LinearRegression
 load-dotenv==0.1.0
