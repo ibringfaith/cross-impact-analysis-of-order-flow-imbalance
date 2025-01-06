@@ -14,7 +14,7 @@ I am provided with a subset of equity market data containing order book updates 
    - Compare self-impact (within the same stock) vs. cross-impact (between stocks) in your models.
 6. #### Visualization and Reporting:
    - Create visualizations (e.g., heatmaps, scatter plots) to illustrate cross-impact relationships and OFI trends.
-   - Summarize your findings in a concise report.
+   - Summarize my findings in a concise report.
 
 ## Steps to Run the Analysis
 1. Clone the repository
