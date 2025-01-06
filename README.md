@@ -33,7 +33,7 @@ touch .env
 ```bash
 touch .gitignore
 ```
-4. Run the script to fetch the data and save it to CSVs
+4. Run the script to fetch the data and save it to CSVs in the data folder
 ```bash
 python scripts/fetch_data.py
 ```
