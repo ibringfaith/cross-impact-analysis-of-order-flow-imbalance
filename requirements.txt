@@ -4,5 +4,5 @@ pandas==2.2.3
 pca==2.0.8
 LinearRegression
 load-dotenv==0.1.0
-matplotlib.pyplot==3.10.0
+matplotlib==3.10.0
 seaborn==0.13.2
