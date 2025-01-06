@@ -25,15 +25,23 @@ git clone ibringfaith/cross-impact-analysis-of-order-flow-imbalance
 ```bash
 pip install -r requirements.txt
 ```
-3. Run the script to fetch the data and save it to CSVs
+3. Create .env file to store API key
+```bash
+touch .env
+```
+4. Create .gitignore file to store .env file
+```bash
+touch .gitignore
+```
+4. Run the script to fetch the data and save it to CSVs
 ```bash
 python scripts/fetch_data.py
 ```
-4. Run the script to perform compute OFI metrics.
+5. Run the script to perform compute OFI metrics.
 ```bash
 python scripts/compute_ofi_metrics.py
 ```
-5. Run the script to quantify and visualize the results.
+6. Run the script to quantify and visualize the results.
 ```bash
 python scripts/analyze_cross_impacts.py
 ```
