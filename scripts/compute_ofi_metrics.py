@@ -21,11 +21,11 @@ def compute_order_flow(book_updates: pd.DataFrame, levels: int) -> Tuple[Dict[in
     of_bid = {}
     of_ask = {}
     for level in range(1, levels + 1):
-        of_bid[level] = book_updates[f'bid_size_{level}'].diff()
-        of_ask[level] = -book_updates[f'ask_size_{level}'].diff()
+        of_bid[level] = book_updates[f'bid_sz_{level:02d}'].diff()
+        of_ask[level] = -book_updates[f'ask_sz_{level:02d}'].diff()
 
-        of_bid[level][book_updates[f'bid_price_{level}'].diff() < 0] = 0
-        of_ask[level][book_updates[f'ask_price_{level}'].diff() > 0] = 0
+        of_bid[level][book_updates[f'bid_px_{level:02d}'].diff() < 0] = 0
+        of_ask[level][book_updates[f'ask_px_{level:02d}'].diff() > 0] = 0
     return of_bid, of_ask
 
 def compute_best_level_ofi(of_bid, of_ask):
@@ -91,7 +91,7 @@ def compute_average_depth(book_updates: pd.DataFrame, levels: int) -> np.ndarray
     """
     avg_depths = []
     for level in range(1, levels + 1):
-        avg_depth = book_updates[[f'bid_size_{level}', f'ask_size_{level}']].mean(axis=1).mean()
+        avg_depth = book_updates[[f'bid_sz_{level:02d}', f'ask_sz_{level:02d}']].mean(axis=1).mean()
         avg_depths.append(avg_depth)
     return np.array(avg_depths)
 
