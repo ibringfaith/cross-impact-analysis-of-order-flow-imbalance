@@ -27,7 +27,7 @@ pip install -r requirements.txt
 ```
 3. Run the script to fetch the data and save it to CSVs
 ```bash
-python scripts/fetch_and_preprocess_data.py
+python scripts/fetch_data.py
 ```
 4. Run the script to perform compute OFI metrics.
 ```bash

@@ -21,9 +21,9 @@ def fetch_mbp10_data(client: db.Historical, stock: str, start_date: str = None, 
     stock: str
         The stock symbol.
     start_date: str, optional
-        The start date for fetching data in YYYY-MM-DD format.
+        The start date for fetching data in YYYY-MM-DDT00:00 format.
     end_date: str, optional
-        The end date for fetching data in YYYY-MM-DD format.
+        The end date for fetching data in YYYY-MM-DDT00:00 format.
     dataset: str
         Dataset to fetch.
     
@@ -59,7 +59,7 @@ def save_data(data: pd.DataFrame, filename: str):
         The file path to save the data.
     """
     data.to_csv(filename, index=False)
-    print(f"Processed data saved to {filename}")
+    print(f"Data saved to {filename}")
 
 def fetch_and_save_data(client: db.Historical, stocks: list[str], start_date: str, end_date: str, dataset: str = 'XNAS.ITCH'):
     """
@@ -79,10 +79,17 @@ def fetch_and_save_data(client: db.Historical, stocks: list[str], start_date: st
     os.makedirs('data', exist_ok=True)
     
     for stock in stocks:
-        print(f"Fetching data for {stock}...")
-        data = fetch_mbp10_data(client, stock, start_date, end_date)
-        df = pd.DataFrame(raw_data)
-        save_processed_data(processed_data_with_pca, f'data/{stock}.csv')
+        try:
+            print(f"Fetching data for {stock} from {start_date} to {end_date}...")
+            df = fetch_mbp10_data(client, stock, start_date, end_date)
+            if df.empty:
+                print(f"No data found for {stock} in the specified range.")
+            else:
+                filename = f'data/{stock}.csv'
+                save_data(df, filename)
+                print(f"Data for {stock} saved to {filename}")
+        except Exception as e:
+            print(f"Error while processing {stock}: {e}")
 
 if __name__ == "__main__":
     load_dotenv()
@@ -94,7 +101,7 @@ if __name__ == "__main__":
 
     # use the Nasdaq ITCH data
     dataset="XNAS.ITCH"
-    start_date = '2024-11-04'
-    end_date = '2024-11-12'
+    start_date = '2024-11-04T00:00'
+    end_date = '2024-11-11T23:59'
 
     fetch_and_save_data(client, stocks, start_date, end_date, dataset)
