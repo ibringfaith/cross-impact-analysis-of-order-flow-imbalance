@@ -3,7 +3,7 @@ numpy==2.2.0
 pandas==2.2.3
 jupyter==1.1.1
 pca==2.0.8
-LinearRegression
+LinearRegression==0.0.1
 load-dotenv==0.1.0
 matplotlib==3.10.0
 seaborn==0.13.2
