@@ -41,8 +41,25 @@ python scripts/fetch_data.py
 ```bash
 python scripts/compute_ofi_metrics.py
 ```
-6. Run the script to quantify and visualize the results.
+6. Run the script to quantify the results.
 ```bash
 python scripts/analyze_cross_impacts.py
 ```
+10. Run the cells in exploratory_data_analysis.ipynb to understand the datasets.
+11. Run the cells in ofi_analysis.ipynb to quantify and visualize the results.
 ## Brief summary of the findings
+1. Coefficients
+-- AAPL: Suggests negligible cross-impact, with limited influence from either itself or other stocks.
+-- AMGN: Indicates more significant price sensitivity to both its OFIs and cross-stock interactions.
+-- TSLA: Reflects low responsiveness to OFIs, both from itself and others.
+-- JPM: Moderate sensitivity, with notable self-impact.
+-- XOM: Indicates minor self- and cross-impact effects.
+2. R-squared values
+-- AAPL: The model explains a negligible portion of price variation.
+-- AMGN: Marginally higher explanatory power compared to AAPL but still low.
+-- TSLA: Very low fit, implying that other factors drive price changes.
+-- JPM: Marginally higher explanatory power compared to TSLA but still low.
+-- XOM: Low fit, suggesting OFIs are not the only driver of price changes.
+3. Insights
+-- OFIs have a low explanatory power for price changes in the analyzed stocks, which implies that other stock market factors drive price change.
+-- Coefficients for the cross-stock OFIs are small, implying weak cross-stock impact. An exception is AMGN (healthcare sector).
