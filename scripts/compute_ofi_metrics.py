@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.decomposition import PCA
 from typing import Dict, Tuple
 
 def compute_order_flow(book_updates: pd.DataFrame, levels: int) -> Tuple[Dict[int, pd.Series], Dict[int, pd.Series]]:
@@ -21,8 +22,8 @@ def compute_order_flow(book_updates: pd.DataFrame, levels: int) -> Tuple[Dict[in
     of_bid = {}
     of_ask = {}
     for level in range(1, levels + 1):
-        of_bid[level] = book_updates[f'bid_sz_{level:02d}'].diff()
-        of_ask[level] = -book_updates[f'ask_sz_{level:02d}'].diff()
+        of_bid[level] = book_updates[f'bid_sz_{level:02d}'].diff().fillna(0)
+        of_ask[level] = -book_updates[f'ask_sz_{level:02d}'].diff().fillna(0)
 
         of_bid[level][book_updates[f'bid_px_{level:02d}'].diff() < 0] = 0
         of_ask[level][book_updates[f'ask_px_{level:02d}'].diff() > 0] = 0
@@ -161,16 +162,24 @@ def integrate_ofi_with_pca(multi_level_ofi: np.ndarray) -> np.ndarray:
     return integrated_ofi
 
 if __name__ == "__main__":
-    stock_data = pd.read_csv("data/AAPL.csv")
+    path = "/Users/ibringfaith/Documents/GitHub/cross-impact-analysis-of-order-flow-imbalance/data"
+    stock_files = [f"{path}/AAPL.csv", f"{path}/AMGN.csv", f"{path}/TSLA.csv", f"{path}/JPM.csv", f"{path}/XOM.csv"]
+    for stock_file in stock_files:
+        try:
+            stock_data = pd.read_csv(stock_file)
+            
+            # derive multi-level OFI metrics (up to 5 levels)
+            levels = 5
+            
+            best_ofi, multi_level_ofi = calculate_ofi(stock_data, levels)
+            integrated_ofi = integrate_ofi_with_pca(multi_level_ofi)
 
-    # derive multi-level OFI metrics (up to 5 levels)
-    levels = 5
+            print(f"OFI Metrics for {stock_file}")
+            
+            print("\nBest-Level OFI (Cumulative):")
+            print(best_ofi.head())
 
-    best_ofi, multi_level_ofi = calculate_ofi(stock_data, levels)
-    integrated_ofi = integrate_ofi_with_pca(multi_level_ofi)
-
-    print("Best-Level OFI (Cumulative):")
-    print(best_ofi.head())
-
-    print("\nIntegrated Multi-Level OFI (using PCA):")
-    print(integrated_ofi[:10])
+            print("\nIntegrated Multi-Level OFI (using PCA):")
+            print(integrated_ofi[:10])
+        except FileNotFoundError:
+            print(f"Error: '{stock_file}' file not found. Please ensure the file exists.")
