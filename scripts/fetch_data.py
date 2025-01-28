@@ -55,7 +55,7 @@ def save_data(data: pd.DataFrame, filename: str):
     ----------
     data: pd.DataFrame
         The stock data.
-    - filename: str
+    filename: str
         The file path to save the data.
     """
     data.to_csv(filename, index=False)
